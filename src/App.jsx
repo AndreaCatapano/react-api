@@ -2,8 +2,10 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 
-const url = "https://www.freetestapi.com/api/v1/actresses"
+import ActorCard from './components/ActorCard.jsx'
 
+
+const url = "https://www.freetestapi.com/api/v1/actresses"
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
     <>
       <ul>
         {actresses.map(actress => (
-          <li key={actress.id}>{actress.name}</li>
+          <ActorCard key={actress.id} actor={actress} />
         ))}
       </ul>
     </>
