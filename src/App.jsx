@@ -1,18 +1,29 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 
 const url = "https://www.freetestapi.com/api/v1/actresses"
 
+
+
 function App() {
 
-  const actress = axios.get(url).then((res) => { res.data }).catch((err => console.log(err)))
+  const [actresses, setActresses] = useState([])
 
-  console.log(actress)
+  function getActress() {
+    const response = axios.get(url).then((res) => setActresses(res.data))
+      .catch((err => console.log(err)))
+  }
+
+  useEffect(() => getActress(), []);
 
   return (
     <>
-
+      <ul>
+        {actresses.map(actress => (
+          <li key={actress.id}>{actress.name}</li>
+        ))}
+      </ul>
     </>
   )
 }
