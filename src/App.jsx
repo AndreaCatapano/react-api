@@ -5,12 +5,13 @@ import { useEffect, useState } from 'react'
 import ActorCard from './components/ActorCard.jsx'
 
 
-const url = "https://www.freetestapi.com/api/v1/actresses"
 
 
 function App() {
 
-  const [actresses, setActresses] = useState([])
+  const [actors, setActresses] = useState([])
+
+  const [url, setUrl] = useState("https://www.freetestapi.com/api/v1/actresses")
 
   function getActress() {
     const response = axios.get(url).then((res) => setActresses(res.data))
@@ -21,11 +22,11 @@ function App() {
 
   return (
     <>
-      <ul>
-        {actresses.map(actress => (
-          <ActorCard key={actress.id} actor={actress} />
+      <div className="cards-container">
+        {actors.map(actor => (
+          <ActorCard key={actor.id} actor={actor} />
         ))}
-      </ul>
+      </div>
     </>
   )
 }
