@@ -2,26 +2,48 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import ActorCard from './components/ActorCard.jsx'
 
+const womanUrl = "https://www.freetestapi.com/api/v1/actresses"
+const manUrl = "https://www.freetestapi.com/api/v1/actors"
+
 function App() {
   const [actors, setActors] = useState([])
-  const [url, setUrl] = useState("https://www.freetestapi.com/api/v1/actresses")
+  const [actresses, setActresses] = useState([])
   const [activeTab, setActiveTab] = useState("actresses")
+  const [displayData, setDisplayData] = useState([])
 
-  function fetchActor() {
-    axios.get(url).then((res) => setActors(res.data))
-      .catch((err => console.log(err)))
+  function fetchActors() {
+    axios.get(manUrl).then(res => setActors(res.data)).catch(err => console.log(err))
   }
 
-  useEffect(() => fetchActor(), [url]);
+  function fetchActresses() {
+    axios.get(womanUrl).then(res => setActresses(res.data)).catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    fetchActors()
+    fetchActresses()
+  }, [])
+
+  useEffect(() => {
+    if (activeTab === "actresses") {
+      setDisplayData(actresses)
+    } else if (activeTab === "actors") {
+      setDisplayData(actors)
+    } else if (activeTab === "both") {
+      setDisplayData([...actors, ...actresses])
+    }
+  }, [activeTab, actors, actresses])
 
   const showActresses = () => {
-    setUrl("https://www.freetestapi.com/api/v1/actresses")
     setActiveTab("actresses")
   }
 
   const showActors = () => {
-    setUrl("https://www.freetestapi.com/api/v1/actors")
     setActiveTab("actors")
+  }
+
+  const showBoth = () => {
+    setActiveTab("both")
   }
 
   return (
@@ -29,15 +51,18 @@ function App() {
       <div className="toggle-container">
         <button
           className={`toggle-button ${activeTab === "actresses" ? "active" : ""}`}
-          onClick={showActresses}>  Actresses  </button>
+          onClick={showActresses}> Actresses</button>
+        <button
+          className={`toggle-button ${activeTab === "both" ? "active" : ""}`}
+          onClick={showBoth}> Both</button>
         <button
           className={`toggle-button ${activeTab === "actors" ? "active" : ""}`}
           onClick={showActors}> Actors </button>
       </div>
 
       <div className="cards-container">
-        {actors.map(actor => (
-          <ActorCard key={actor.id} actor={actor} />
+        {(displayData || []).map(person => (
+          <ActorCard key={person.id} actor={person} />
         ))}
       </div>
     </>
