@@ -12,11 +12,29 @@ function App() {
   const [displayData, setDisplayData] = useState([])
 
   function fetchActors() {
-    axios.get(manUrl).then(res => setActors(res.data)).catch(err => console.log(err))
+    axios.get(manUrl)
+      .then(res => {
+        const actorsWithUniqueIds = res.data.map(actor => ({
+          ...actor,
+          originalId: actor.id,
+          id: `actor-${actor.id}`
+        }));
+        setActors(actorsWithUniqueIds);
+      })
+      .catch(err => console.log(err))
   }
 
   function fetchActresses() {
-    axios.get(womanUrl).then(res => setActresses(res.data)).catch(err => console.log(err))
+    axios.get(womanUrl)
+      .then(res => {
+        const actressesWithUniqueIds = res.data.map(actress => ({
+          ...actress,
+          originalId: actress.id,
+          id: `actress-${actress.id}`
+        }));
+        setActresses(actressesWithUniqueIds);
+      })
+      .catch(err => console.log(err))
   }
 
   useEffect(() => {
